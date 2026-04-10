@@ -1,0 +1,89 @@
+---
+alwaysApply: true
+---
+
+# StreamList Project Rules (AI-First Development)
+
+## 🔒 Core Architecture Rules
+
+- Screens must NEVER contain data fetching logic.
+- No useEffect + API calls inside screen components.
+- All data fetching must be handled via custom hooks inside src/hooks/.
+
+- All API calls must go through src/api/client.ts.
+- Direct usage of axios in components or hooks is STRICTLY PROHIBITED.
+- API functions must be defined in src/api/movies.ts and imported where needed.
+
+## 🎨 Theming Rules
+
+- No hardcoded color values are allowed anywhere in the codebase.
+- All colors must be imported from src/theme/colors.ts.
+
+- No hardcoded spacing values (e.g., margin: 10, padding: 16).
+- All spacing must come from src/theme/spacing.ts.
+
+- No inline font styles.
+- Typography must come from src/theme/typography.ts.
+
+## 🧩 Component Rules
+
+- All components must be functional components using TypeScript.
+- Use StyleSheet.create() for styling (no inline styles unless absolutely necessary).
+- No use of any type — strict typing required.
+
+## 🔄 State Management Rules
+
+- Global state must be handled ONLY using Zustand.
+- Redux, MobX, or any other state library is NOT allowed.
+
+- Watchlist state must persist using AsyncStorage.
+- Hydration must be handled before rendering dependent UI.
+
+## 🌐 API & Environment Rules
+
+- API tokens must NEVER be hardcoded.
+- All environment variables must be accessed via @env (react-native-dotenv).
+- .env file must NOT be committed to version control.
+- .env.example must be present with placeholder values.
+
+## 🧭 Navigation Rules
+
+- Navigation must use React Navigation v6 ONLY.
+- All navigation types must be defined in src/navigation/types.ts.
+- No untyped navigation calls allowed.
+
+## 📁 Folder Structure Rules
+
+- Follow the exact folder structure defined in the project spec.
+- Do not create unnecessary folders or files.
+- Keep separation of concerns strictly enforced.
+
+## ⚠️ Error & Loading Handling
+
+- Every API-driven UI must handle:
+  - Loading state (use skeleton loaders, NOT spinners)
+  - Error state (with retry option)
+  - Empty state (user-friendly UI)
+
+## 🚫 Strictly Prohibited
+
+- No hardcoded API keys
+- No direct axios usage outside api/client.ts
+- No CSS-in-JS libraries (Styled Components, NativeWind, etc.)
+- No UI libraries (React Native Paper, Elements, etc.)
+- No inline business logic inside UI components
+
+## 🎯 AI Behavior Instructions
+
+- Always follow the defined architecture before generating code.
+- Prefer consistency over shortcuts.
+- If unsure, default to modular and reusable patterns.
+- Do not introduce new libraries unless explicitly asked.
+- Always respect existing file structure and conventions.
+
+## 🧠 Development Philosophy
+
+- Prioritize clarity over cleverness
+- Prefer simple, maintainable solutions
+- Handle edge cases proactively
+- Think beyond the spec when implementing features

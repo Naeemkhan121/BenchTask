@@ -1,0 +1,118 @@
+import type { ReactElement } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import type { GenreChip } from '../../api/movies';
+import { colors } from '../../theme/colors';
+import { layout } from '../../theme/layout';
+import { spacing } from '../../theme/spacing';
+import { typography } from '../../theme/typography';
+
+export interface GenreFilterStripProps {
+  chips: GenreChip[];
+  selectedIndex: number;
+  onSelect: (index: number) => void;
+  isLoading: boolean;
+}
+
+export function GenreFilterStrip({
+  chips,
+  selectedIndex,
+  onSelect,
+  isLoading,
+}: GenreFilterStripProps): ReactElement {
+  if (isLoading && chips.length === 0) {
+    return (
+      <View style={styles.skeletonRow}>
+        {Array.from({ length: 7 }).map((_, i) => (
+          <View
+            key={i}
+            style={[styles.skeletonChip, i < 6 && styles.skeletonChipMargin]}
+          />
+        ))}
+      </View>
+    );
+  }
+
+  return (
+    <ScrollView
+      horizontal
+      contentContainerStyle={styles.scrollContent}
+      showsHorizontalScrollIndicator={false}
+    >
+      {chips.map((chip, index) => {
+        const active = index === selectedIndex;
+        const isLast = index === chips.length - 1;
+        return (
+          <Pressable
+            key={`${chip.label}-${String(chip.genreId ?? 'all')}-${String(index)}`}
+            accessibilityRole="button"
+            accessibilityState={{ selected: active }}
+            onPress={() => {
+              onSelect(index);
+            }}
+            style={({ pressed }) => [
+              styles.chip,
+              !isLast && styles.chipSpacing,
+              active ? styles.chipActive : styles.chipInactive,
+              pressed && styles.chipPressed,
+            ]}
+          >
+            <Text
+              style={[
+                typography['title-sm'],
+                active ? styles.chipTextActive : styles.chipTextInactive,
+              ]}
+            >
+              {chip.label}
+            </Text>
+          </Pressable>
+        );
+      })}
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  scrollContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+  },
+  chipSpacing: {
+    marginRight: spacing.sm,
+  },
+  chip: {
+    paddingHorizontal: layout.genreChipPaddingHorizontal,
+    paddingVertical: layout.genreChipPaddingVertical,
+    borderRadius: spacing.lg,
+  },
+  chipActive: {
+    backgroundColor: colors.secondary_container,
+  },
+  chipInactive: {
+    backgroundColor: colors.surface_container_high,
+  },
+  chipPressed: {
+    opacity: 0.9,
+  },
+  chipTextActive: {
+    color: colors.on_surface,
+  },
+  chipTextInactive: {
+    color: colors.on_surface_variant,
+  },
+  skeletonRow: {
+    flexDirection: 'row',
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+  },
+  skeletonChip: {
+    width: spacing.xl * 3,
+    height: spacing.xl + spacing.sm,
+    borderRadius: spacing.lg,
+    backgroundColor: colors.surface_container_high,
+  },
+  skeletonChipMargin: {
+    marginRight: spacing.sm,
+  },
+});
